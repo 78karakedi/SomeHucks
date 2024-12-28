@@ -177,22 +177,22 @@ local function onRenderStepped()
         local camera = workspace.CurrentCamera
         local moveDirection = Vector3.new(0, 0, 0)
 
-        if UserInputService:IsKeyDown(Enum.KeyCode.W) then
+        if UserInputService:IsKeyDown(Enum.KeyCode.W) or UserInputService:IsKeyDown(Enum.KeyCode.Thumbstick1) then
             moveDirection = moveDirection + camera.CFrame.LookVector
         end
-        if UserInputService:IsKeyDown(Enum.KeyCode.S) then
+        if UserInputService:IsKeyDown(Enum.KeyCode.S) or UserInputService:IsKeyDown(Enum.KeyCode.Thumbstick1) then
             moveDirection = moveDirection - camera.CFrame.LookVector
         end
-        if UserInputService:IsKeyDown(Enum.KeyCode.A) then
+        if UserInputService:IsKeyDown(Enum.KeyCode.A) or UserInputService:IsKeyDown(Enum.KeyCode.Thumbstick2) then
             moveDirection = moveDirection - camera.CFrame.RightVector
         end
-        if UserInputService:IsKeyDown(Enum.KeyCode.D) then
+        if UserInputService:IsKeyDown(Enum.KeyCode.D) or UserInputService:IsKeyDown(Enum.KeyCode.Thumbstick2) then
             moveDirection = moveDirection + camera.CFrame.RightVector
         end
-        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+        if UserInputService:IsKeyDown(Enum.KeyCode.Space) or UserInputService:IsKeyDown(Enum.KeyCode.ButtonA) then
             moveDirection = moveDirection + Vector3.new(0, 1, 0)
         end
-        if UserInputService:IsKeyDown(Enum.KeyCode.LeftAlt) then
+        if UserInputService:IsKeyDown(Enum.KeyCode.LeftAlt) or UserInputService:IsKeyDown(Enum.KeyCode.ButtonB) then
             moveDirection = moveDirection - Vector3.new(0, 1, 0)
         end
 
@@ -273,19 +273,19 @@ local draggingFlySpeedSlider = false
 local draggingWalkSpeedSlider = false
 
 flySpeedSlider.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         draggingFlySpeedSlider = true
     end
 end)
 
 flySpeedSlider.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         draggingFlySpeedSlider = false
     end
 end)
 
 flySpeedSliderFrame.InputChanged:Connect(function(input)
-    if draggingFlySpeedSlider and input.UserInputType == Enum.UserInputType.MouseMovement then
+    if draggingFlySpeedSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
         local mouseX = input.Position.X
         local frameX = flySpeedSliderFrame.AbsolutePosition.X
         local frameWidth = flySpeedSliderFrame.AbsoluteSize.X
@@ -297,19 +297,19 @@ flySpeedSliderFrame.InputChanged:Connect(function(input)
 end)
 
 walkSpeedSlider.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         draggingWalkSpeedSlider = true
     end
 end)
 
 walkSpeedSlider.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         draggingWalkSpeedSlider = false
     end
 end)
 
 walkSpeedSliderFrame.InputChanged:Connect(function(input)
-    if draggingWalkSpeedSlider and input.UserInputType == Enum.UserInputType.MouseMovement then
+    if draggingWalkSpeedSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
         local mouseX = input.Position.X
         local frameX = walkSpeedSliderFrame.AbsolutePosition.X
         local frameWidth = walkSpeedSliderFrame.AbsoluteSize.X
@@ -354,20 +354,20 @@ local draggingControlPanel = false
 local controlPanelDragOffset
 
 topBar.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         draggingControlPanel = true
         controlPanelDragOffset = Vector2.new(input.Position.X - controlPanel.AbsolutePosition.X, input.Position.Y - controlPanel.AbsolutePosition.Y)
     end
 end)
 
 topBar.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         draggingControlPanel = false
     end
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-    if draggingControlPanel and input.UserInputType == Enum.UserInputType.MouseMovement then
+    if draggingControlPanel and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
         local newPosition = Vector2.new(input.Position.X - controlPanelDragOffset.X, input.Position.Y - controlPanelDragOffset.Y)
         controlPanel.Position = UDim2.new(0, newPosition.X, 0, newPosition.Y)
     end
@@ -400,23 +400,4 @@ teleportBox.FocusLost:Connect(function(enterPressed)
     end
 end)
 bringPlayerBox.FocusLost:Connect(function(enterPressed)
-    if enterPressed then
-        bringPlayer(bringPlayerBox.Text)
-        bringPlayerBox.Text = ""
-    end
-end)
-flingButton.MouseButton1Click:Connect(enableFling)
-openButton.MouseButton1Click:Connect(function()
-    controlPanel.Visible = not controlPanel.Visible
-end)
-walkSpeedToggleButton.MouseButton1Click:Connect(toggleWalkSpeed)
-
--- Ensure walk speed remains active
-humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
-    if walkSpeedEnabled and humanoid.WalkSpeed ~= walkSpeed then
-        humanoid.WalkSpeed = walkSpeed
-    end
-end)
-
--- Connect RenderStepped to handle flying movement
-RunService.RenderStepped:Connect(onRenderStepped)
+    if enter
